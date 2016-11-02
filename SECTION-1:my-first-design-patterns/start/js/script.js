@@ -8,3 +8,29 @@ var leadself = 'Me: ',
 									"As long as we don’t die, this is gonna be one hell of a story.",
 									"She laughed, and the desert sang.",
 									"You’ve got about as much charm as a dead slug."];
+
+function talk(msg) {
+	echo(leadself + msg)
+}
+
+function replyYesNo() {
+	var msg = Math.random()>.5 ? msgYes : msgNo
+	echo(leadcomputer + msg);
+}
+
+function saySassyStuff() {
+	var msg = aSassyStuff[Math.floor(Math.random() * aSassyStuff.length)];
+	echo(msg);
+}
+
+function echo(msg) {
+	aSaid.push("<div>" + msg + "</div>")
+	var aSaidLength = aSaid.length;
+	var start = Math.max(aSaidLength - 6, 0);
+	var out = "";
+	for(var i = start; i < aSaidLength; i++) {
+		out += aSaid[i]
+	}
+	$('#talk span').text(msg);
+	$('.advert').html(out);
+}
