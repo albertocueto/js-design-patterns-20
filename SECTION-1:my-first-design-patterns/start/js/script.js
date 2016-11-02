@@ -8,12 +8,13 @@ com.zombiecientifico.learning.jsdp = com.zombiecientifico.learning.jsdp || {};*/
 //Module pattern demonstration:
 var chatModule = (function() {
 	//This part is private to this module
-	var leadself = 'Me: ',
-	leadcomputer = "PC: ",
-	aSaid = ["This is a Cyber Chat"],
-	msgYes = "Yes, that's a great idea.",
-	msgNo = "No, that must be a mistake.",
-	aSassyStuff = [
+	//Underscore characters a the beginning mean a private element:
+	var _leadself = 'Me: ',
+	_leadcomputer = "PC: ",
+	_aSaid = ["This is a Cyber Chat"],
+	_msgYes = "Yes, that's a great idea.",
+	_msgNo = "No, that must be a mistake.",
+	_aSassyStuff = [
 			"Like mold on books, grow myths on history.",
 			"She moved like a poem and smiled like a sphinx.",
 			"As long as we don’t die, this is gonna be one hell of a story.",
@@ -21,19 +22,38 @@ var chatModule = (function() {
 			"You’ve got about as much charm as a dead slug."
 	];
 	//The echo function is in this other part, which makes it part of this Module's function:
-	var echo = function(msg) {
-			aSaid.push("<div>" + msg + "</div>")
-			var aSaidLength = aSaid.length;
+	var _echo = function(msg) {
+			_aSaid.push("<div>" + msg + "</div>")
+			var aSaidLength = _aSaid.length;
 			var start = Math.max(aSaidLength - 6, 0);
 			var out = "";
 			for (var i = start; i < aSaidLength; i++) {
-					out += aSaid[i]
+					out += _aSaid[i]
 			}
 			$('#talk span').text(msg);
 			$('.advert').html(out);
 	};
-	//this part is going to be public
+	var talk = function(msg) {
+			_echo(_leadself + msg)
+	};
+	var replyYesNo = function() {
+			var msg = Math.random() > .5 ? _msgYes : _msgNo;
+			_echo(_leadcomputer + msg);
+	};
+	var saySassyStuff = function() {
+			var msg = _aSassyStuff[Math.floor(Math.random() * _aSassyStuff.length)];
+			_echo(msg);
+	};
+
+	//I return everything that is to be public
 	return {
+		talk: talk,
+		replyYesNo: replyYesNo,
+		saySassyStuff: saySassyStuff
+	}
+	//this part is going to be public
+	//Commenting this to favor module reveal  desihm pattern
+	/*return {
 		talk: function(msg) {
         echo(leadself + msg)
     },
@@ -45,7 +65,7 @@ var chatModule = (function() {
         var msg = aSassyStuff[Math.floor(Math.random() * aSassyStuff.length)];
         echo(msg);
     }
-	};
+	};*/
 })();
 
 $(document).ready(function() {
