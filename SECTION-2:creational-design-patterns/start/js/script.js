@@ -1,18 +1,35 @@
 (function(win, $) {
+    var RedCircle = function() {
+      this.item = $('<div class="circle"></div>');
+    },
+    BlueCircle = function() {
+      this.item = $('<div class="circle" style="background-color: blue"></div>');
+    },
+    CircleFactory = function() {
+      this.create = function(color) {
+        if(color === 'blue') {
+          return new BlueCircle();
+        } else {
+          return new RedCircle();
+        }
+      }
+    };
+
     var CircleGeneratorSingleton = (function() {
         var instance;
 
         function init() {
             var _aCircle = [],
-                _stage = $('.advert');
+                _stage = $('.advert'),
+                _cf = new CircleFactory();
 
             function _position(circle, left, top) {
                 circle.css('left', left);
                 circle.css('top', top);
             }
 
-            function create(left, top) {
-                var circle = $('<div class="circle"></div>');
+            function create(left, top, color) {
+                var circle = _cf.create(color).item;
                 _position(circle, left, top);
                 return circle;
             }
@@ -48,7 +65,7 @@
     $(win.document).ready(function() {
         $('.advert').click(function(e) {
             var cgs = CircleGeneratorSingleton.getInstance();
-            var circle = cgs.create(e.pageX - 25, e.pageY - 25)
+            var circle = cgs.create(e.pageX - 25, e.pageY - 25, 'red');
 
             cgs.add(circle);
 
@@ -57,7 +74,7 @@
         $(document).keypress(function(e) {
             if (e.key == 'a') {
                 var cgs = CircleGeneratorSingleton.getInstance();
-                var circle = cgs.create(Math.floor(Math.random() * 600), Math.floor(Math.random() * 600));
+                var circle = cgs.create(Math.floor(Math.random() * 600), Math.floor(Math.random() * 600), 'blue');
                 cgs.add(circle);
             }
         });
